@@ -23,20 +23,27 @@ public class ChatServer
         // Start ServerDispatcher thread
         ServerDispatcher serverDispatcher = new ServerDispatcher();
         serverDispatcher.start();
+        System.out.println("Started server dispatcher");
  
         // Accept and handle client connections
         while (true) {
            try {
                Socket socket = serverSocket.accept();
+               System.out.println("new user connected");
                ClientInfo clientInfo = new ClientInfo();
                clientInfo.mSocket = socket;
+               
                ClientListener clientListener = new ClientListener(clientInfo, serverDispatcher);
                ClientSender clientSender = new ClientSender(clientInfo, serverDispatcher);
+
                clientInfo.mClientListener = clientListener;
                clientInfo.mClientSender = clientSender;
                clientListener.start();
+               System.out.println("made client listener");
                clientSender.start();
+               System.out.println("made client sender");
                serverDispatcher.addClient(clientInfo);
+               System.out.println("added client ayy lmao");
            } catch (IOException ioe) {
                ioe.printStackTrace();
            }

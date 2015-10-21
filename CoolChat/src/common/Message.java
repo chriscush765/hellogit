@@ -1,6 +1,8 @@
-package server;
+package common;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable{
 
 	public Status status;
 	public String sender;

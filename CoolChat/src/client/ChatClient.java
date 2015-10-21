@@ -2,6 +2,8 @@ package client;
 
 import java.io.*;
 import java.net.*;
+
+import common.*;
  
 public class ChatClient
 {

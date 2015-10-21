@@ -1,6 +1,7 @@
 package client;
 
 import java.io.*;
+import common.*;
 
 class Sender extends Thread {
 	private ObjectOutputStream mOut;
@@ -23,9 +24,10 @@ class Sender extends Thread {
 				mail.value = message;
 				mOut.writeObject(mail);
 				mOut.flush();
+	            System.out.println("sent message " + mail.value);
 			}
 		} catch (IOException ioe) {
-			// Communication is broken
+			ioe.printStackTrace();
 		}
 	}
 }

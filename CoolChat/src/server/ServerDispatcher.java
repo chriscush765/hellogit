@@ -1,5 +1,6 @@
 package server;
 
+import java.io.IOException;
 import java.net.*;
 import java.util.*;
 import common.*;
@@ -8,6 +9,7 @@ public class ServerDispatcher extends Thread
 {
     private Vector mMessageQueue = new Vector();
     private Vector mClients = new Vector();
+    public boolean anonMode = false;
  
     /**
      * Adds given client to the server's client list.
@@ -23,9 +25,28 @@ public class ServerDispatcher extends Thread
      */
     public synchronized void deleteClient(ClientInfo aClientInfo)
     {
+    	
         int clientIndex = mClients.indexOf(aClientInfo);
-        if (clientIndex != -1)
-           mClients.removeElementAt(clientIndex);
+        if (clientIndex != -1){
+        	aClientInfo.mClientListener.interrupt();
+        	aClientInfo.mClientSender.interrupt();
+        	mClients.removeElementAt(clientIndex);
+        }
+           
+    }
+    
+    /**
+     * Deletes given client from the server's client list
+     * if the client is in the list.
+     */
+    public synchronized void kickClient(ClientInfo aClientInfo, String admin ,String reason)
+    {
+    	Message mail = new Message();
+    	mail.status = Status.KICK;
+    	mail.sender = "Server";
+    	mail.value = "You have been kicked by "+admin+": "+reason;
+    	aClientInfo.mClientSender.sendMessage(mail);
+        deleteClient(aClientInfo);
     }
  
     /**
@@ -34,14 +55,12 @@ public class ServerDispatcher extends Thread
      * dispatchMessage method is called by other threads (ClientListener) when
      * a message is arrived.
      */
-    public synchronized void dispatchMessage(ClientInfo aClientInfo, Message aMail)
+    public synchronized void dispatchMessage(ClientInfo aClientInfo, Message mail)
     {
         Socket socket = aClientInfo.mSocket;
-        Message mMail = new Message();
-        mMail.sender = socket.getInetAddress().getHostAddress();
-        mMail.value = aMail.value;
-        mMail.status = Status.SAY;
-        mMessageQueue.add(mMail);
+        mail.sender = socket.getInetAddress().getHostAddress();
+        mail.name = aClientInfo.name;
+        mMessageQueue.add(mail);
         notify();
     }
  
@@ -64,7 +83,7 @@ public class ServerDispatcher extends Thread
      * message is added to the client sender thread's message queue and this
      * client sender thread is notified.
      */
-    private synchronized void sendMessageToAllClients(Message aMail)
+    protected synchronized void sendMessageToAllClients(Message aMail)
     {
         for (int i=0; i<mClients.size(); i++) {
            ClientInfo clientInfo = (ClientInfo) mClients.get(i);

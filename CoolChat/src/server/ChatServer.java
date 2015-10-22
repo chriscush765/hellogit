@@ -1,6 +1,10 @@
 package server;
 
 import java.net.*;
+import java.util.*;
+
+import common.*;
+
 import java.io.*;
  
 public class ChatServer
@@ -11,6 +15,7 @@ public class ChatServer
     {
         // Open server socket for listening
         ServerSocket serverSocket = null;
+        
         try {
            serverSocket = new ServerSocket(LISTENING_PORT);
            System.out.println("NakovChatServer started on port " + LISTENING_PORT);
@@ -39,11 +44,8 @@ public class ChatServer
                clientInfo.mClientListener = clientListener;
                clientInfo.mClientSender = clientSender;
                clientListener.start();
-               System.out.println("made client listener");
                clientSender.start();
-               System.out.println("made client sender");
                serverDispatcher.addClient(clientInfo);
-               System.out.println("added client ayy lmao");
            } catch (IOException ioe) {
                ioe.printStackTrace();
            }

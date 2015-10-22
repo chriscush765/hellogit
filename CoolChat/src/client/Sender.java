@@ -20,14 +20,29 @@ class Sender extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			while (!isInterrupted()) {
 				String message = in.readLine();
-				Message mail = new Message();
-				mail.value = message;
-				mOut.writeObject(mail);
-				mOut.flush();
-	            System.out.println("sent message " + mail.value);
+				sendMail(processText(message));
+				
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
+		}
+	}
+	
+	public synchronized Message processText(String input){
+		if(input.startsWith("/name ")){
+			return new Message(input.substring(6), Status.LOGIN);
+		}
+		else
+			return new Message(input, Status.SAY);
+	}
+	
+	public synchronized void sendMail(Message aMail){
+		try {
+			mOut.writeObject(aMail);
+			mOut.flush();
+		} catch (IOException e) {
+			System.err.println("could not send message");
+			e.printStackTrace();
 		}
 	}
 }

@@ -28,9 +28,7 @@ public class ClientListener extends Thread
         try {
            while (!isInterrupted()) {
                Message mail = (Message) mIn.readObject();
-               if (mail == null)
-                   break;
-               mServerDispatcher.dispatchMessage(mClientInfo, mail);
+               processMail(mail);
            }
         } catch (IOException | ClassNotFoundException ioex) {
            // Problem reading from socket (communication is broken)
@@ -40,5 +38,26 @@ public class ClientListener extends Thread
         mClientInfo.mClientSender.interrupt();
         mServerDispatcher.deleteClient(mClientInfo);
     }
+    
+    public synchronized void processMail(Message mail){
+		if (mail == null)
+			return;
+		
+		if (mail.status == Status.LOGIN) {
+			String oldName = mClientInfo.name;
+			if(oldName == null)
+				oldName = "(New User)";
+			mClientInfo.name = mail.value;
+			mServerDispatcher.sendMessageToAllClients(new Message("Server", oldName + " changed their name to "+mClientInfo.name, Status.SAY));
+		}
+		else if(mClientInfo.name == null && !mServerDispatcher.anonMode){
+			mClientInfo.mClientSender.sendMessage(new Message("Server","You may not be anonymous. Type \"/name desiredname\"", Status.WARN));
+			//mServerDispatcher.kickClient(mClientInfo, "Server", "Your name can not be NULL");
+		}
+		else if(mail.status == Status.SAY){
+			mServerDispatcher.dispatchMessage(mClientInfo, mail);
+		}
+
+	}
  
 }

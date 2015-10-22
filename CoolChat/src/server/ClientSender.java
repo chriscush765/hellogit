@@ -30,6 +30,7 @@ public class ClientSender extends Thread
     public synchronized void sendMessage(Message aMessage)
     {
         mMessageQueue.add(aMessage);
+        System.out.println("just sent message "+aMessage.value);
         notify();
     }
  

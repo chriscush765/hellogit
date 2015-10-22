@@ -31,25 +31,16 @@ public class ChatClient
            System.exit(-1);
         }
  
-        // Create and start Sender thread
+        // Create Sender/Receiver thread
         Sender sender = new Sender(out);
-        sender.setDaemon(true);
+        Receiver receiver = new Receiver(in);
+        
+        
+        
         sender.start();
+        receiver.start();
  
-        try {
-           // Read messages from the server and print them
-            Message mail;
-           while ((mail = (Message) in.readObject()) != null) {
-//        	   if(mail.status == Status.SAY){
-        		   String message = mail.name + ": " + mail.value;
-        		   System.out.println(message);
-//        	   }
-        		   
-           }
-        } catch (IOException | ClassNotFoundException ioe) {
-           System.err.println("Connection to server broken.");
-           ioe.printStackTrace();
-        }
+       
  
     }
 }

@@ -8,8 +8,15 @@ import common.*;
 public class ServerDispatcher extends Thread
 {
     private Vector mMessageQueue = new Vector();
-    private Vector mClients = new Vector();
+    protected Vector<ClientInfo> mClients = new Vector<ClientInfo>();
     public boolean anonMode = false;
+    protected int key;
+    
+    public ServerDispatcher() {
+		Random rand = new Random();
+		key = rand.nextInt((9999 - 1111) + 1) + 1111;
+		System.out.println("Admin key is "+key);
+	}
  
     /**
      * Adds given client to the server's client list.
@@ -106,5 +113,13 @@ public class ServerDispatcher extends Thread
            // Thread interrupted. Stop its execution
         }
     }
+
+	public boolean nameIsUnique(String value) {
+		int occurances = 0;
+		for(ClientInfo clientInfo : mClients)
+			if(clientInfo.name != null && clientInfo.name.equals(value))
+				occurances++;
+		return occurances == 0;
+	}
  
 }

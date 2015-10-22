@@ -38,26 +38,42 @@ public class ClientListener extends Thread
         mClientInfo.mClientSender.interrupt();
         mServerDispatcher.deleteClient(mClientInfo);
     }
-    
-    public synchronized void processMail(Message mail){
-		if (mail == null)
-			return;
-		
-		if (mail.status == Status.LOGIN) {
-			String oldName = mClientInfo.name;
-			if(oldName == null)
-				oldName = "(New User)";
-			mClientInfo.name = mail.value;
-			mServerDispatcher.sendMessageToAllClients(new Message("Server", oldName + " changed their name to "+mClientInfo.name, Status.SAY));
-		}
-		else if(mClientInfo.name == null && !mServerDispatcher.anonMode){
-			mClientInfo.mClientSender.sendMessage(new Message("Server","You may not be anonymous. Type \"/name desiredname\"", Status.WARN));
-			//mServerDispatcher.kickClient(mClientInfo, "Server", "Your name can not be NULL");
-		}
-		else if(mail.status == Status.SAY){
-			mServerDispatcher.dispatchMessage(mClientInfo, mail);
-		}
 
-	}
+    public synchronized void processMail(Message mail){
+    	if (mail == null)
+    		return;
+
+    	if (mail.status == Status.LOGIN) {
+    		if(!mServerDispatcher.nameIsUnique(mail.value))
+    			mClientInfo.mClientSender.sendMessage(new Message("Server","This name has already been taken", Status.WARN));
+    		else{
+    			String oldName = mClientInfo.name;
+    			if(oldName == null)
+    				oldName = "New User";
+    			mClientInfo.name = mail.value;
+    			mServerDispatcher.sendMessageToAllClients(new Message("Server", "["+oldName + "] changed their name to ["+mClientInfo.name+"]", Status.SERVER));
+    		}
+    	}
+    	else if(mClientInfo.name == null && !mServerDispatcher.anonMode){
+    		mClientInfo.mClientSender.sendMessage(new Message("Server","You may not be anonymous. Type \"/name desiredname\"", Status.WARN));
+    	}
+    	else if(mail.status == Status.SAY){
+    		mServerDispatcher.dispatchMessage(mClientInfo, mail);
+    	}
+    	else if(mail.status == Status.SERVER){
+    		if(mClientInfo.rank<=0)
+    			mServerDispatcher.kickClient(mClientInfo, "Server", "You may not speak as the server");
+    		else
+    			mServerDispatcher.sendMessageToAllClients(new Message("Server",mail.value, Status.SERVER));
+    	}
+    	else if(mail.status == Status.ADMIN){
+    		if(mClientInfo.rank == 0 && mail.value.equals(mServerDispatcher.key)){
+    			mClientInfo.rank = 999;
+    			mServerDispatcher.sendMessageToAllClients(new Message("Server", mClientInfo.name + " IS GODLIKE", Status.SERVER));
+    		}
+    			
+    	}
+
+    }
  
 }

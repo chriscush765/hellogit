@@ -8,4 +8,5 @@ public class ClientInfo
     public ClientListener mClientListener = null;
     public ClientSender mClientSender = null;
     public String name = null;
+    public int rank = 0;
 }

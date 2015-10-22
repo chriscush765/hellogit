@@ -23,6 +23,10 @@ public class Receiver extends Thread{
 	        		   String message = mail.name + ": " + mail.value;
 	        		   System.err.println(message);
 	        	   }
+	        	   else if(mail.status == Status.SERVER){
+	        		   System.err.print(mail.name+": ");
+	        		   System.out.println(mail.value);
+	        	   }
 	        	   else
 	        		   System.out.println(mail.value);
 	        		   

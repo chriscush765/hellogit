@@ -32,6 +32,9 @@ class Sender extends Thread {
 		if(input.startsWith("/name ")){
 			return new Message(input.substring(6), Status.LOGIN);
 		}
+		if(input.startsWith("/admin ")){
+			return new Message(input.substring(7), Status.ADMIN);
+		}
 		else
 			return new Message(input, Status.SAY);
 	}

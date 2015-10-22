@@ -1,7 +1,9 @@
 package client;
 
 import java.io.*;
-import common.*;
+
+import common.Message;
+import common.Status;
 
 class Sender extends Thread {
 	private ObjectOutputStream mOut;
@@ -20,24 +22,13 @@ class Sender extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			while (!isInterrupted()) {
 				String message = in.readLine();
-				sendMail(processText(message));
-				
+				sendMail(new Message(message, Status.CHAT));
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
-	
-	public synchronized Message processText(String input){
-		if(input.startsWith("/name ")){
-			return new Message(input.substring(6), Status.LOGIN);
-		}
-		if(input.startsWith("/admin ")){
-			return new Message(input.substring(7), Status.ADMIN);
-		}
-		else
-			return new Message(input, Status.SAY);
-	}
+
 	
 	public synchronized void sendMail(Message aMail){
 		try {

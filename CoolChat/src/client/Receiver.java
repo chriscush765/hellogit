@@ -1,7 +1,8 @@
 package client;
 
 import java.io.*;
-import common.*;
+
+import common.Message;
 
 public class Receiver extends Thread{
 
@@ -15,15 +16,15 @@ public class Receiver extends Thread{
 	           // Read messages from the server and print them
 	            Message mail;
 	           while ((mail = (Message) mIn.readObject()) != null) {
-	        	   if(mail.status == Status.SAY){
+	        	   if(mail.status.equals("SAY")){
 	        		   String message = mail.name + ": " + mail.value;
 	        		   System.out.println(message);
 	        	   }
-	        	   else if(mail.status == Status.WARN){
+	        	   else if(mail.status.equals("WARN")){
 	        		   String message = mail.name + ": " + mail.value;
 	        		   System.err.println(message);
 	        	   }
-	        	   else if(mail.status == Status.SERVER){
+	        	   else if(mail.status.equals("SERVER")){
 	        		   System.err.print(mail.name+": ");
 	        		   System.out.println(mail.value);
 	        	   }

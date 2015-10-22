@@ -3,11 +3,14 @@ package server;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+
 import common.*;
+import plugins.*;
  
 public class ServerDispatcher extends Thread
 {
-    private Vector mMessageQueue = new Vector();
+    private Vector mOutgoingQueue = new Vector();
+    private PluginManager mPluginManager = new PluginManager(this);
     protected Vector<ClientInfo> mClients = new Vector<ClientInfo>();
     public boolean anonMode = false;
     protected int key;
@@ -19,7 +22,7 @@ public class ServerDispatcher extends Thread
 	}
  
     /**
-     * Adds given client to the server's client list.
+     * Adds given client to the server's5 client list.
      */
     public synchronized void addClient(ClientInfo aClientInfo)
     {
@@ -67,7 +70,7 @@ public class ServerDispatcher extends Thread
         Socket socket = aClientInfo.mSocket;
         mail.sender = socket.getInetAddress().getHostAddress();
         mail.name = aClientInfo.name;
-        mMessageQueue.add(mail);
+        mOutgoingQueue.add(mail);
         notify();
     }
  
@@ -75,15 +78,20 @@ public class ServerDispatcher extends Thread
      * @return and deletes the next message from the message queue. If there is no
      * messages in the queue, falls in sleep until notified by dispatchMessage method.
      */
-    private synchronized Message getNextMessageFromQueue()
+    private synchronized Message getNextMessageFromOutgoingQueue()
     throws InterruptedException
     {
-        while (mMessageQueue.size()==0)
+        while (mOutgoingQueue.size()==0)
            wait();
-        Message mail = (Message) mMessageQueue.get(0);
-        mMessageQueue.removeElementAt(0);
+        Message mail = (Message) mOutgoingQueue.get(0);
+        mOutgoingQueue.removeElementAt(0);
         return mail;
     }
+    
+    protected synchronized void processIncomingMessage(Message aMail){
+    	
+    }
+    
  
     /**
      * Sends given message to all clients in the client list. Actually the
@@ -106,7 +114,7 @@ public class ServerDispatcher extends Thread
     {
         try {
            while (true) {
-               Message mail = getNextMessageFromQueue();
+               Message mail = getNextMessageFromOutgoingQueue();
                sendMessageToAllClients(mail);
            }
         } catch (InterruptedException ie) {

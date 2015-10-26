@@ -10,7 +10,7 @@ public class Name implements Plugin {
 	}
 
 	public void process(Message mail, ServerDispatcher serverDispatcher) {
-			
+			mail.value = mail.value.substring(0, 6);
 		
 	}
 

@@ -4,9 +4,9 @@ import server.ServerDispatcher;
 
 import common.Message;
 
-public class Say implements Plugin {
+public class Say extends Plugin {
 
-	public boolean isValid(Message mail) {
+	public static boolean isValid(Message mail) {
 		return true;
 	}
 

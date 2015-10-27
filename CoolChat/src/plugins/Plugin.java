@@ -3,10 +3,14 @@ package plugins;
 import common.Message;
 import server.*;
 
-public interface Plugin {
+public abstract class Plugin extends Thread{
 
 	
-	public boolean isValid(Message mail);
+	public static boolean isValid(Message mail){
+		return false;
+	}
 	
-	public void process(Message mail, ServerDispatcher serverDispatcher);
+	public void process(Message mail, ServerDispatcher serverDispatcher){
+		return;
+	}
 }

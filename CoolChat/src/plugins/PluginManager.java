@@ -22,12 +22,7 @@ public class PluginManager {
 		for(Plugin plugin : PluginList){
 			if(plugin.isValid(mail))
 				plugin.process(mail, mServerDispatcher);
-		}
-			
+		}	
 	}
-	
-	
-	
-	
 
 }

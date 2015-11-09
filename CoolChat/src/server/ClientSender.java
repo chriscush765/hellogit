@@ -3,8 +3,6 @@ package server;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
-import common.*;
  
 public class ClientSender extends Thread
 {
@@ -19,7 +17,7 @@ public class ClientSender extends Thread
     {
         mClientInfo = aClientInfo;
         mServerDispatcher = aServerDispatcher;
-        Socket socket = aClientInfo.mSocket;
+        Socket socket = (Socket) aClientInfo.get("socket");
         mOut = new ObjectOutputStream(socket.getOutputStream());
     }
  

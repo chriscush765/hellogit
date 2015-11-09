@@ -2,7 +2,6 @@ package server;
 
 import java.io.*;
 import java.net.*;
-import common.*;
  
 public class ClientListener extends Thread
 {
@@ -15,7 +14,7 @@ public class ClientListener extends Thread
     {
         mClientInfo = aClientInfo;
         mServerDispatcher = aServerDispatcher;
-        Socket socket = aClientInfo.mSocket;
+        Socket socket = (Socket) aClientInfo.get("socket");
         mIn = new ObjectInputStream(socket.getInputStream());
     }
  

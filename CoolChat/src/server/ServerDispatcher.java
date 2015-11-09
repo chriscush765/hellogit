@@ -3,15 +3,13 @@ package server;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
-
-import common.*;
 import plugins.*;
  
 public class ServerDispatcher extends Thread
 {
     private Vector mOutgoingQueue = new Vector();
-    private PluginManager mPluginManager = new PluginManager(this);
-    protected Vector<ClientInfo> mClients = new Vector<ClientInfo>();
+    private PluginManager mPluginManager;
+    public Vector<ClientInfo> mClients = new Vector<ClientInfo>();
     public boolean anonMode = false;
     protected int key;
     
@@ -19,6 +17,8 @@ public class ServerDispatcher extends Thread
 		Random rand = new Random();
 		key = rand.nextInt((9999 - 1111) + 1) + 1111;
 		System.out.println("Admin key is "+key);
+		mPluginManager = new PluginManager(this);
+		mPluginManager.start();
 	}
  
     /**
@@ -51,10 +51,7 @@ public class ServerDispatcher extends Thread
      */
     public synchronized void kickClient(ClientInfo aClientInfo, String admin ,String reason)
     {
-    	Message mail = new Message();
-    	mail.status = Status.KICK;
-    	mail.sender = "Server";
-    	mail.value = "You have been kicked by "+admin+": "+reason;
+    	Message mail = new Message("Server: You have been kicked by "+admin+": "+reason);
     	aClientInfo.mClientSender.sendMessage(mail);
         deleteClient(aClientInfo);
     }
@@ -68,8 +65,7 @@ public class ServerDispatcher extends Thread
     public synchronized void dispatchMessage(ClientInfo aClientInfo, Message mail)
     {
         Socket socket = aClientInfo.mSocket;
-        mail.sender = socket.getInetAddress().getHostAddress();
-        mail.name = aClientInfo.name;
+        mail.value = (String) aClientInfo.get("name") + mail.value;
         mOutgoingQueue.add(mail);
         notify();
     }
@@ -89,7 +85,7 @@ public class ServerDispatcher extends Thread
     }
     
     protected synchronized void processIncomingMessage(Message aMail){
-    	
+    	mPluginManager.addMessageToQueue(aMail);
     }
     
  
@@ -98,7 +94,7 @@ public class ServerDispatcher extends Thread
      * message is added to the client sender thread's message queue and this
      * client sender thread is notified.
      */
-    protected synchronized void sendMessageToAllClients(Message aMail)
+    public synchronized void sendMessageToAllClients(Message aMail)
     {
         for (int i=0; i<mClients.size(); i++) {
            ClientInfo clientInfo = (ClientInfo) mClients.get(i);
@@ -121,13 +117,4 @@ public class ServerDispatcher extends Thread
            // Thread interrupted. Stop its execution
         }
     }
-
-	public boolean nameIsUnique(String value) {
-		int occurances = 0;
-		for(ClientInfo clientInfo : mClients)
-			if(clientInfo.name != null && clientInfo.name.equals(value))
-				occurances++;
-		return occurances == 0;
-	}
- 
 }

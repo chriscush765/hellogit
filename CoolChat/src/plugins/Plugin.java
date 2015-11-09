@@ -1,16 +1,13 @@
 package plugins;
 
-import common.Message;
-import server.*;
+import server.Message;
+import server.ServerDispatcher;
 
-public abstract class Plugin extends Thread{
+public interface Plugin {
 
-	
-	public static boolean isValid(Message mail){
-		return false;
-	}
-	
-	public void process(Message mail, ServerDispatcher serverDispatcher){
-		return;
-	}
+	boolean catchAll = false;
+
+	public boolean isValid(Message mail);
+
+	public void process(Message mail, ServerDispatcher serverDispatcher);
 }

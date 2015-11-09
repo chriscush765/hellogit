@@ -3,7 +3,7 @@ package server;
 import java.net.*;
 import java.util.*;
 
-import common.*;
+
 
 import java.io.*;
  
@@ -36,13 +36,13 @@ public class ChatServer
                Socket socket = serverSocket.accept();
                System.out.println("new user connected");
                ClientInfo clientInfo = new ClientInfo();
-               clientInfo.mSocket = socket;
+               clientInfo.add("socket", socket);
                
                ClientListener clientListener = new ClientListener(clientInfo, serverDispatcher);
                ClientSender clientSender = new ClientSender(clientInfo, serverDispatcher);
 
-               clientInfo.mClientListener = clientListener;
-               clientInfo.mClientSender = clientSender;
+               clientInfo.add("listener",clientListener);
+               clientInfo.add("sender", clientSender);
                clientListener.start();
                clientSender.start();
                serverDispatcher.addClient(clientInfo);

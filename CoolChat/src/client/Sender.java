@@ -2,7 +2,7 @@ package client;
 
 import java.io.*;
 
-import common.Message;
+import server.Message;
 import common.Status;
 
 class Sender extends Thread {

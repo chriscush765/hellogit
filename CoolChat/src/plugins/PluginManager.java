@@ -23,6 +23,7 @@ public class PluginManager{
 	public void sendMessageToPlugins(Message mail) {
 		for(Plugin plugin : PluginList){
 			if(plugin.isValid(mail)){
+				System.out.println("sent to a plugin");
 				plugin.process(mail, mServerDispatcher);
 				break; //only use one plugin so we get priority
 			}

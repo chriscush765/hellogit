@@ -26,7 +26,9 @@ public class ClientListener extends Thread
     {
         try {
            while (!isInterrupted()) {
-               Message mail = new Message(mIn.readLine());
+        	   System.out.println("yoo");
+        	   String text = mIn.readLine();
+               Message mail = new Message(text);
                mail.sender = mClientInfo;
                mServerDispatcher.processIncomingMessage(mail);
            }

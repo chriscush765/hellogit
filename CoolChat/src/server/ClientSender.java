@@ -10,7 +10,7 @@ public class ClientSender extends Thread
  
     private ServerDispatcher mServerDispatcher;
     private ClientInfo mClientInfo;
-    private OutputStreamWriter mOut;
+    private PrintWriter mOut;
  
     public ClientSender(ClientInfo aClientInfo, ServerDispatcher aServerDispatcher)
     throws IOException
@@ -18,7 +18,7 @@ public class ClientSender extends Thread
         mClientInfo = aClientInfo;
         mServerDispatcher = aServerDispatcher;
         Socket socket = aClientInfo.mSocket;
-        mOut = new OutputStreamWriter(socket.getOutputStream());
+        mOut = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
  
     /**

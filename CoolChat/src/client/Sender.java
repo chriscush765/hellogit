@@ -3,10 +3,10 @@ package client;
 import java.io.*;
 
 class Sender extends Thread {
-	private OutputStreamWriter mOut;
+	private PrintWriter mOut;
 	private String mClient;
 
-	public Sender(OutputStreamWriter aOut) {
+	public Sender(PrintWriter aOut) {
 		mOut = aOut;
 	}
 
@@ -19,7 +19,9 @@ class Sender extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			while (!isInterrupted()) {
 				String message = in.readLine();
+				System.out.println("message");
 				sendMail(message);
+				System.out.println("sent");
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -28,12 +30,7 @@ class Sender extends Thread {
 
 	
 	public synchronized void sendMail(String aMail){
-		try {
-			mOut.write(aMail);
-			mOut.flush();
-		} catch (IOException e) {
-			System.err.println("could not send message");
-			e.printStackTrace();
-		}
+		mOut.write(aMail);
+		mOut.flush();
 	}
 }

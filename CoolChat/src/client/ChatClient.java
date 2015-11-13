@@ -13,11 +13,11 @@ public class ChatClient
     public static void main(String[] args)
     {
         BufferedReader in = null;
-        OutputStreamWriter out = null;
+        PrintWriter out = null;
         try {
            // Connect to Nakov Chat Server
            Socket socket = new Socket(SERVER_HOSTNAME, SERVER_PORT);
-           out = new OutputStreamWriter(socket.getOutputStream());
+           out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
            
            System.out.println("Connected to server " +

@@ -2,14 +2,11 @@ package client;
 
 import java.io.*;
 
-import server.Message;
-import common.Status;
-
 class Sender extends Thread {
-	private ObjectOutputStream mOut;
+	private OutputStreamWriter mOut;
 	private String mClient;
 
-	public Sender(ObjectOutputStream aOut) {
+	public Sender(OutputStreamWriter aOut) {
 		mOut = aOut;
 	}
 
@@ -22,7 +19,7 @@ class Sender extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			while (!isInterrupted()) {
 				String message = in.readLine();
-				sendMail(new Message(message, Status.CHAT));
+				sendMail(message);
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -30,9 +27,9 @@ class Sender extends Thread {
 	}
 
 	
-	public synchronized void sendMail(Message aMail){
+	public synchronized void sendMail(String aMail){
 		try {
-			mOut.writeObject(aMail);
+			mOut.write(aMail);
 			mOut.flush();
 		} catch (IOException e) {
 			System.err.println("could not send message");

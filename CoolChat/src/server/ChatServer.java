@@ -36,13 +36,13 @@ public class ChatServer
                Socket socket = serverSocket.accept();
                System.out.println("new user connected");
                ClientInfo clientInfo = new ClientInfo();
-               clientInfo.add("socket", socket);
+               clientInfo.mSocket = socket;
                
                ClientListener clientListener = new ClientListener(clientInfo, serverDispatcher);
                ClientSender clientSender = new ClientSender(clientInfo, serverDispatcher);
 
-               clientInfo.add("listener",clientListener);
-               clientInfo.add("sender", clientSender);
+               clientInfo.mClientListener = clientListener;
+               clientInfo.mClientSender = clientSender;
                clientListener.start();
                clientSender.start();
                serverDispatcher.addClient(clientInfo);

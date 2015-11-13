@@ -8,7 +8,7 @@ import plugins.*;
 public class ServerDispatcher extends Thread
 {
     private Vector mOutgoingQueue = new Vector();
-    private PluginManager mPluginManager;
+    private PluginManager mPluginManager = new PluginManager(this);;
     public Vector<ClientInfo> mClients = new Vector<ClientInfo>();
     public boolean anonMode = false;
     protected int key;
@@ -17,8 +17,6 @@ public class ServerDispatcher extends Thread
 		Random rand = new Random();
 		key = rand.nextInt((9999 - 1111) + 1) + 1111;
 		System.out.println("Admin key is "+key);
-		mPluginManager = new PluginManager(this);
-		mPluginManager.start();
 	}
  
     /**
@@ -85,7 +83,7 @@ public class ServerDispatcher extends Thread
     }
     
     protected synchronized void processIncomingMessage(Message aMail){
-    	mPluginManager.addMessageToQueue(aMail);
+    	mPluginManager.sendMessageToPlugins(aMail);
     }
     
  

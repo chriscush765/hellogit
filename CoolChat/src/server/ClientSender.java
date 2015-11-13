@@ -10,15 +10,15 @@ public class ClientSender extends Thread
  
     private ServerDispatcher mServerDispatcher;
     private ClientInfo mClientInfo;
-    private ObjectOutputStream mOut;
+    private OutputStreamWriter mOut;
  
     public ClientSender(ClientInfo aClientInfo, ServerDispatcher aServerDispatcher)
     throws IOException
     {
         mClientInfo = aClientInfo;
         mServerDispatcher = aServerDispatcher;
-        Socket socket = (Socket) aClientInfo.get("socket");
-        mOut = new ObjectOutputStream(socket.getOutputStream());
+        Socket socket = aClientInfo.mSocket;
+        mOut = new OutputStreamWriter(socket.getOutputStream());
     }
  
     /**
@@ -53,7 +53,7 @@ public class ClientSender extends Thread
      */
     private void sendMessageToClient(Message aMessage) throws IOException
     {
-        mOut.writeObject(aMessage);
+        mOut.write(aMessage.value);
         mOut.flush();
     }
  

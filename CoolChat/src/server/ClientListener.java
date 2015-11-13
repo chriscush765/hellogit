@@ -7,15 +7,15 @@ public class ClientListener extends Thread
 {
     private ServerDispatcher mServerDispatcher;
     private ClientInfo mClientInfo;
-    private ObjectInputStream mIn;
+    private BufferedReader mIn;
  
     public ClientListener(ClientInfo aClientInfo, ServerDispatcher aServerDispatcher)
     throws IOException
     {
         mClientInfo = aClientInfo;
         mServerDispatcher = aServerDispatcher;
-        Socket socket = (Socket) aClientInfo.get("socket");
-        mIn = new ObjectInputStream(socket.getInputStream());
+        Socket socket = aClientInfo.mSocket;
+        mIn = new BufferedReader(new InputStreamReader((socket.getInputStream())));
     }
  
     /**
@@ -26,11 +26,11 @@ public class ClientListener extends Thread
     {
         try {
            while (!isInterrupted()) {
-               Message mail = (Message) mIn.readObject();
+               Message mail = new Message(mIn.readLine());
                mail.sender = mClientInfo;
                mServerDispatcher.processIncomingMessage(mail);
            }
-        } catch (IOException | ClassNotFoundException ioex) {
+        } catch (IOException ioex) {
            // Problem reading from socket (communication is broken)
         }
  

@@ -3,7 +3,7 @@ package plugins;
 import server.Message;
 import server.ServerDispatcher;
 
-public class Say extends Thread implements Plugin {
+public class Say implements Plugin {
 	
 	public boolean isValid(Message mail) {
 		return true;

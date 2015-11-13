@@ -12,13 +12,13 @@ public class ChatClient
  
     public static void main(String[] args)
     {
-        ObjectInputStream in = null;
-        ObjectOutputStream out = null;
+        BufferedReader in = null;
+        OutputStreamWriter out = null;
         try {
            // Connect to Nakov Chat Server
            Socket socket = new Socket(SERVER_HOSTNAME, SERVER_PORT);
-           out = new ObjectOutputStream(socket.getOutputStream());
-           in = new ObjectInputStream(socket.getInputStream());
+           out = new OutputStreamWriter(socket.getOutputStream());
+           in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
            
            System.out.println("Connected to server " +
               SERVER_HOSTNAME + ":" + SERVER_PORT);

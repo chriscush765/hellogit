@@ -1,11 +1,11 @@
 package plugins;
 import java.util.*;
-
 import server.*;
 
 public class PluginManager{
 
 	protected ServerDispatcher mServerDispatcher;
+	public static boolean case1 = false;
 
 	protected Vector<Plugin> PluginList = new Vector<Plugin>();
 
@@ -22,11 +22,11 @@ public class PluginManager{
 
 	public void sendMessageToPlugins(Message mail) {
 		for(Plugin plugin : PluginList){
-			if(plugin.isValid(mail)){
-				System.out.println("sent to a plugin");
-				plugin.process(mail, mServerDispatcher);
-				break; //only use one plugin so we get priority
+			if(case1){
+				case1 = false;
+				break;
 			}
+			new MessageDispatcher(plugin, mail, mServerDispatcher);
 		}	
 	}
 

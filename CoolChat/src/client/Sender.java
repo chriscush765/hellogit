@@ -19,9 +19,7 @@ class Sender extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			while (!isInterrupted()) {
 				String message = in.readLine();
-				System.out.println("message");
-				sendMail(message);
-				System.out.println("sent");
+				sendMail(message + "\n");
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

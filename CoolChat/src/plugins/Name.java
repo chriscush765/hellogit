@@ -36,5 +36,8 @@ public class Name implements Plugin {
 		return true;
 	}
 	
+	public String getName(){
+		return "Set Name";
+	}
 
 }

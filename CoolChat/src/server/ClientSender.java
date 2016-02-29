@@ -53,7 +53,7 @@ public class ClientSender extends Thread
      */
     private void sendMessageToClient(Message aMessage) throws IOException
     {
-        mOut.write(aMessage.value);
+        mOut.write(aMessage.value + "\n");
         mOut.flush();
     }
  

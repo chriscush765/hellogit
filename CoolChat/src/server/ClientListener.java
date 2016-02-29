@@ -26,12 +26,12 @@ public class ClientListener extends Thread
     {
         try {
            while (!isInterrupted()) {
-        	   System.out.println("yoo");
-        	   String text = mIn.readLine();
+        	String text = mIn.readLine();
                Message mail = new Message(text);
                mail.sender = mClientInfo;
                mServerDispatcher.processIncomingMessage(mail);
-           }
+        	}
+           
         } catch (IOException ioex) {
            // Problem reading from socket (communication is broken)
         }

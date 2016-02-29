@@ -6,6 +6,8 @@ import server.ServerDispatcher;
 public interface Plugin {
 
 	boolean catchAll = false;
+	
+	public String getName();
 
 	public boolean isValid(Message mail);
 

@@ -12,5 +12,9 @@ public class Say implements Plugin {
 	public void process(Message mail, ServerDispatcher serverDispatcher) {
 		serverDispatcher.sendMessageToAllClients(mail);
 	}
+	
+	public String getName(){
+		return "Say Plugin";
+	}
 
 }

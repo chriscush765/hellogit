@@ -6,7 +6,7 @@ import java.util.*;
  
 public class ClientSender extends Thread
 {
-    private Vector mMessageQueue = new Vector();
+    private Vector<Message> mMessageQueue = new Vector<Message>();
  
     private ServerDispatcher mServerDispatcher;
     private ClientInfo mClientInfo;

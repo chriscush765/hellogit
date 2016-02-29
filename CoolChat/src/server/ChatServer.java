@@ -1,7 +1,6 @@
 package server;
 
 import java.net.*;
-import java.util.*;
 
 
 
@@ -49,7 +48,16 @@ public class ChatServer
            } catch (IOException ioe) {
                ioe.printStackTrace();
            }
+           
+           try {
+			serverSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         }
+        
+
     }
  
 }

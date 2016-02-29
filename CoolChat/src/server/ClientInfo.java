@@ -11,8 +11,8 @@ public class ClientInfo
     public ClientListener mClientListener = null;
     public ClientSender mClientSender = null;
     
-	private Vector mName = new Vector();
-	private Vector mValue = new Vector();
+	private Vector<String> mName = new Vector<String>();
+	private Vector<Object> mValue = new Vector<Object>();
 	private Vector<Plugin> mPlugins = new Vector<Plugin>();
 	
 	public synchronized void add(String aName, Object aValue){

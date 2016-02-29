@@ -1,13 +1,11 @@
 package server;
 
-import java.io.IOException;
-import java.net.*;
 import java.util.*;
 import plugins.*;
  
 public class ServerDispatcher extends Thread
 {
-    private Vector mOutgoingQueue = new Vector();
+    private Vector<Message> mOutgoingQueue = new Vector<Message>();
     private PluginManager mPluginManager = new PluginManager(this);;
     public Vector<ClientInfo> mClients = new Vector<ClientInfo>();
     public boolean anonMode = false;
@@ -62,7 +60,6 @@ public class ServerDispatcher extends Thread
      */
     public synchronized void dispatchMessage(ClientInfo aClientInfo, Message mail)
     {
-        Socket socket = aClientInfo.mSocket;
         mail.value = (String) aClientInfo.get("name") + mail.value;
         mOutgoingQueue.add(mail);
         notify();

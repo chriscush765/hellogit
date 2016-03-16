@@ -18,11 +18,26 @@ public class ServerDispatcher extends Thread
 	}
  
     /**
-     * Adds given client to the server's5 client list.
+     * Adds given client to the server's client list.
      */
     public synchronized void addClient(ClientInfo aClientInfo)
     {
         mClients.add(aClientInfo);
+    }
+    
+    /**
+     * Sends a welcome message to a client
+     */
+    public synchronized void sendWelcomeMessage(ClientInfo aClientInfo) {
+    	sendMessageToClient("Welcome to the server!", aClientInfo);
+    	sendMessageToClient("Remember to set your name with /name", aClientInfo);
+    }
+    
+    /**
+     * Sends a message to a given client
+     */
+    public synchronized void sendMessageToClient(String aMessage, ClientInfo aClientInfo) {
+    	aClientInfo.mClientSender.sendMessage(new Message("(Server)" + aMessage));
     }
  
     /**
@@ -45,9 +60,9 @@ public class ServerDispatcher extends Thread
      * Deletes given client from the server's client list
      * if the client is in the list.
      */
-    public synchronized void kickClient(ClientInfo aClientInfo, String admin ,String reason)
+    public synchronized void kickClient(ClientInfo aClientInfo, String by ,String reason)
     {
-    	Message mail = new Message("Server: You have been kicked by "+admin+": "+reason);
+    	Message mail = new Message("Server: You have been kicked by "+by+": "+reason);
     	aClientInfo.mClientSender.sendMessage(mail);
         deleteClient(aClientInfo);
     }

@@ -9,7 +9,7 @@ public class Name implements Plugin {
 	}
 
 	public void process(Message mail, ServerDispatcher serverDispatcher) {
-			String desiredName = mail.value.substring(0, 6); //remove /name
+			String desiredName = mail.value.substring(6, mail.value.length()); //remove /name
 			if(nameIsOk(desiredName)){
 				String oldName = (String) mail.sender.get("name");
 				mail.sender.add("name", desiredName);

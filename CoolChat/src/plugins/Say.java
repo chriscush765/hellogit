@@ -10,7 +10,12 @@ public class Say implements Plugin {
 	}
 
 	public void process(Message mail, ServerDispatcher serverDispatcher) {
-		serverDispatcher.sendMessageToAllClients(mail);
+		String message;
+		if(serverDispatcher.anonMode)
+			message = "[Anon] " + mail.value;
+		else
+			message = "[" + mail.sender.get("name") + "] " + mail.value;
+		serverDispatcher.sendMessageToAllClients(new Message(message));
 	}
 	
 	public String getName(){

@@ -42,6 +42,7 @@ public class ChatServer
 
                clientInfo.mClientListener = clientListener;
                clientInfo.mClientSender = clientSender;
+               clientInfo.add("name", "Anon");
                clientListener.start();
                clientSender.start();
                serverDispatcher.addClient(clientInfo);
@@ -49,12 +50,6 @@ public class ChatServer
                ioe.printStackTrace();
            }
            
-           try {
-			serverSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         }
         
 

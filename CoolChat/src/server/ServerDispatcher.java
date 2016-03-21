@@ -23,6 +23,7 @@ public class ServerDispatcher extends Thread
     public synchronized void addClient(ClientInfo aClientInfo)
     {
         mClients.add(aClientInfo);
+        sendWelcomeMessage(aClientInfo);
     }
     
     /**
@@ -56,15 +57,45 @@ public class ServerDispatcher extends Thread
            
     }
     
-    /**
-     * Deletes given client from the server's client list
-     * if the client is in the list.
-     */
+	  /**
+	   * A method that kicks a client off the server
+	   * @param aClientInfo The client to kick
+	   * @param by The name of who kicked the client
+	   * @param reason The reason for the kick
+	   */
     public synchronized void kickClient(ClientInfo aClientInfo, String by ,String reason)
     {
     	Message mail = new Message("Server: You have been kicked by "+by+": "+reason);
     	aClientInfo.mClientSender.sendMessage(mail);
         deleteClient(aClientInfo);
+    }
+    
+    /**
+     * Searches the list of clients for a given name
+     * @param aName The name of the client
+     * @return The client that matches the name
+     */
+    public ClientInfo searchForClient(String aName)
+    {
+    	for(ClientInfo c : mClients){
+    		if(c.get("name").equals(aName))
+    			return c;
+    	}
+    	return null;
+    }
+    
+    /**
+     * A method that changes the name of a client, given that the name is unique
+     * @param aClient The client to change the name of
+     * @param aDesiredName The desired name
+     * @return If the operation was successful
+     */
+    public synchronized boolean changeClientName(ClientInfo aClient, String aDesiredName){
+    	if(searchForClient(aDesiredName) == null){
+    		aClient.add("name", aDesiredName);
+    		return true;
+    	}
+    	return false;
     }
  
     /**

@@ -1,7 +1,8 @@
 package server;
 
 import java.net.Socket;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
 
 import plugins.Plugin;
 
@@ -11,31 +12,15 @@ public class ClientInfo
     public ClientListener mClientListener = null;
     public ClientSender mClientSender = null;
     
-	private Vector<String> mName = new Vector<String>();
-	private Vector<Object> mValue = new Vector<Object>();
-	private Vector<Plugin> mPlugins = new Vector<Plugin>();
+	private Map<String, Object> data = new HashMap<String, Object>();
 	
 	public synchronized void add(String aName, Object aValue){
-		if(mName.contains(aName))
-			throw new IllegalArgumentException();
-		mName.addElement(aName);
-		mValue.addElement(aValue);
+		data.put(aName, aValue);
 	}
 	
-	public synchronized Object get(String name){
-		int index = mName.indexOf(name);
-		if(index < 0)
-			return null;
-		return mValue.get(index);
+	public synchronized Object get(String aName){
+		return data.get(aName);
 	}
 	
-	public synchronized void addPlugin(Plugin aPlugin){
-		mPlugins.add(aPlugin);
-	}
-	
-	public synchronized void notifyPlugins(){
-		for(Plugin plugin : mPlugins)
-			plugin.notify();
-	}
     
 }
